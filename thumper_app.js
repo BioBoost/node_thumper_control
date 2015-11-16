@@ -26,6 +26,15 @@ app.get('/', function (req, res){
   res.send(JSON.stringify({ message: "Hello and welcome to the Thumper Control RESTful API" }));
 });
 
+// @GET
+// returns { "battery_voltage": 7.88 }
+app.get('/batteryvoltage', function (req, res){
+  res.setHeader('Content-Type', 'application/json');
+  var voltage = (7 + (Math.random() * ((11 - 7) + 1))).toFixed(2);;
+  res.send(JSON.stringify({ batteryvoltage: voltage }));
+});
+
+
 // Custom 404 (needs to be last in line of routes)
 app.use(function(req, res, next){
   res.type('text/plain');
