@@ -28,8 +28,8 @@ if (include_i2c) {
 app.use(function(req, res, next){
   console.log('[' + Date.now() + '] Request received');
   console.log('    url: ' + req.originalUrl);
-  console.log('    params: ' + req.params);
-  console.log('    body: ' + req.body);
+  console.log('    params: ' + JSON.stringify(req.params));
+  console.log('    body: ' + JSON.stringify(req.body));
   next();
 });
 
@@ -75,6 +75,33 @@ app.get('/neopixels/strings/:id', function (req, res) {
   var id = req.params.id    // id is currently unused (i2c function not implemented yet)
   res.setHeader('Content-Type', 'application/json');
   res.send(JSON.stringify({ string_id: id, number_of_pixels: "8" }));
+});
+
+// @POST
+// expects {"id": 0, "color": {"red": 10, "green": 255, "blue": 0} }
+// returns { "status": "success" }
+app.post('/neopixels/strings/:id', function (req, res) {
+  var id = req.params.id    // id is currently unused (i2c function not implemented yet)
+  var red = req.body.color.red;
+  var green = req.body.color.green;
+  var blue = req.body.color.blue;
+  console.log('Setting color for string ' + id + ' to R=' + red + ' G=' + green + ' B=' + blue);
+
+  res.setHeader('Content-Type', 'application/json');
+
+  if (include_i2c) {
+    // Send color to mbed
+    wire.write([0x03, red, green, blue], function(err) {
+      if (err) {
+        console.log('Could not write color to i2c: ' + err);
+        res.send(JSON.stringify({ status: "failed" }));
+      } else {
+        res.send(JSON.stringify({ status: "success" }));
+      }
+    });
+  } else {
+    res.send(JSON.stringify({ status: "success" }));
+  }
 });
 
 // Custom 404 (needs to be last in line of routes)
