@@ -69,6 +69,14 @@ app.get('/neopixels/strings', function (req, res) {
   }
 });
 
+// @GET
+// returns { "string_id": "1", "number_of_pixels": "8" }
+app.get('/neopixels/strings/:id', function (req, res) {
+  var id = req.params.id    // id is currently unused (i2c function not implemented yet)
+  res.setHeader('Content-Type', 'application/json');
+  res.send(JSON.stringify({ string_id: id, number_of_pixels: "8" }));
+});
+
 // Custom 404 (needs to be last in line of routes)
 app.use(function(req, res, next){
   res.type('text/plain');
