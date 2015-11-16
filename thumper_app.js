@@ -78,13 +78,13 @@ app.get('/neopixels/strings/:id', function (req, res) {
 });
 
 // @POST
-// expects {"id": 0, "color": {"red": 10, "green": 255, "blue": 0} }
+// expects { red": 10, "green": 255, "blue": 0 }
 // returns { "status": "success" }
 app.post('/neopixels/strings/:id', function (req, res) {
   var id = req.params.id    // id is currently unused (i2c function not implemented yet)
-  var red = req.body.color.red;
-  var green = req.body.color.green;
-  var blue = req.body.color.blue;
+  var red = req.body.red;
+  var green = req.body.green;
+  var blue = req.body.blue;
   console.log('Setting color for string ' + id + ' to R=' + red + ' G=' + green + ' B=' + blue);
 
   res.setHeader('Content-Type', 'application/json');
