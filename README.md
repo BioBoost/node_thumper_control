@@ -22,11 +22,13 @@ Thumper Control RESTful node app provides a RESTful interface to the thumper con
 
 ### Installation
 
-TODO
+```sh
+$ npm install
+```
+
+If working on Raspberry Pi you also need to install the i2c package
 
 ```sh
-$ npm install express
-$ npm install body-parser
 $ npm install git+https://github.com/kelly/node-i2c.git
 ```
 
@@ -39,7 +41,7 @@ node thumper_app.js
 ```
 
 ### License
-TODO
+Apache-2.0
 
 **Free Software, Hell Yeah!**
 

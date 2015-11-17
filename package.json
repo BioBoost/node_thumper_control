@@ -1,0 +1,32 @@
+{
+  "name": "node_thumper_control",
+  "version": "0.1.0-alpha",
+  "description": "Thumper Control RESTful node app provides a RESTful interface to the thumper controlled by a Raspberry Pi.",
+  "main": "thumper_app.js",
+  "dependencies": {
+    "body-parser": "~1.14.1",
+    "express": "~4.13.3"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/BioBoost/node_thumper_control.git"
+  },
+  "keywords": [
+    "thumper",
+    "i2c",
+    "node",
+    "rest",
+    "neopixel",
+    "raspberry",
+    "pi"
+  ],
+  "author": "Nico De Witte",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/BioBoost/node_thumper_control/issues"
+  }
+}
