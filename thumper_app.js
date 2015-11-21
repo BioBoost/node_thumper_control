@@ -2,6 +2,7 @@
 var express = require('express');
 var app = express();
 var bodyParser = require("body-parser");
+var NeoPixelController = require('./lib/neopixelcontroller');
 
 // Set port
 app.set('port', process.env.PORT || 3000);
@@ -10,19 +11,7 @@ app.set('port', process.env.PORT || 3000);
 app.use(bodyParser.json());   // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true }));   // for parsing application/x-www-form-urlencoded
 
-// If i2c module is not available just ignore i2c
-var include_i2c = true;
-try {
-  var i2c = require('i2c');
-} catch(err) {
-  include_i2c = false;
-  console.log('Module i2c is not installed. Proceeding without ...');
-}
-
-if (include_i2c) {
-  var address = 0x40;
-  var wire = new i2c(address, {device: '/dev/i2c-1'}); // point to your i2c address, debug provides REPL interface
-}
+var neopix = new NeoPixelController.create(0x40, '/dev/i2c-1');
 
 // Log all requests
 app.use(function(req, res, next){
@@ -53,20 +42,16 @@ app.get('/batteryvoltage', function (req, res){
 app.get('/neopixels/strings', function (req, res) {
   res.setHeader('Content-Type', 'application/json');
 
-  if (include_i2c) {
-    wire.readByte(function(err, nos) {
-      if (err) {
-        console.log('Could not read from i2c: ' + err);
-        res.send(JSON.stringify({ number_of_string: "", string_ids: [], status: "failed" }));
-      } else {
-        var ids = new Array(nos);
-        for (i = 0; i < nos; i++) { ids[i] = i; }
-        res.send(JSON.stringify({ number_of_string: nos, string_ids: ids, status: "success" }));
-      }
-    });
-  } else {
-    res.send(JSON.stringify({ number_of_string: "2", string_ids: [0, 1], status: "success" }));
-  }
+  neopix.getNumberOfString(function(err, nos) {
+    if (err) {
+      console.log('Could not read from i2c: ' + err);
+      res.send(JSON.stringify({ number_of_string: "", string_ids: [], status: "failed" }));
+    } else {
+      var ids = new Array(nos);
+      for (i = 0; i < nos; i++) { ids[i] = i; }
+      res.send(JSON.stringify({ number_of_string: nos, string_ids: ids, status: "success" }));
+    }
+  });
 });
 
 // @GET
@@ -89,19 +74,14 @@ app.post('/neopixels/strings/:id', function (req, res) {
 
   res.setHeader('Content-Type', 'application/json');
 
-  if (include_i2c) {
-    // Send color to mbed
-    wire.write([0x03, red, green, blue], function(err) {
-      if (err) {
-        console.log('Could not write color to i2c: ' + err);
-        res.send(JSON.stringify({ status: "failed" }));
-      } else {
-        res.send(JSON.stringify({ status: "success" }));
-      }
-    });
-  } else {
-    res.send(JSON.stringify({ status: "success" }));
-  }
+  neopix.setAll(red, green, blue, function(err){
+    if (err) {
+      console.log('Could not write color to i2c: ' + err);
+      res.send(JSON.stringify({ status: "failed" }));
+    } else {
+      res.send(JSON.stringify({ status: "success" }));
+    }
+  });
 });
 
 // Custom 404 (needs to be last in line of routes)
