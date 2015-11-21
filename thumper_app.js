@@ -3,6 +3,7 @@ var express = require('express');
 var app = express();
 var bodyParser = require("body-parser");
 var NeoPixelController = require('./lib/neopixelcontroller');
+var TRexController = require('./lib/trexcontroller')
 
 // Set port
 app.set('port', process.env.PORT || 3000);
@@ -12,6 +13,7 @@ app.use(bodyParser.json());   // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true }));   // for parsing application/x-www-form-urlencoded
 
 var neopix = new NeoPixelController.create(0x40, '/dev/i2c-1');
+var trex = new TRexController.create(0x07, '/dev/i2c-1');
 
 // Log all requests
 app.use(function(req, res, next){
@@ -30,11 +32,18 @@ app.get('/', function (req, res){
 });
 
 // @GET
-// returns { "battery_voltage": "7.88" }
+// returns { "battery_voltage": "7.88", status: "success" }
 app.get('/batteryvoltage', function (req, res){
   res.setHeader('Content-Type', 'application/json');
-  var voltage = (7 + (Math.random() * ((11 - 7) + 1))).toFixed(2);;
-  res.send(JSON.stringify({ batteryvoltage: voltage }));
+
+  trex.getBatteryVoltage(function(err, voltage) {
+    if (err) {
+      console.log('Could not read status from trex controller: ' + err);
+      res.send(JSON.stringify({ battery_voltage: "", status: "failed" }));
+    } else {
+      res.send(JSON.stringify({ battery_voltage: voltage, status: "success" }));
+    }
+  });
 });
 
 // @GET

@@ -1,0 +1,22 @@
+var i2c = require('i2c');
+
+create = function(i2c_address, i2c_device) {
+    var address = i2c_address;
+    var wire = new i2c(i2c_address, {device: i2c_device}); // point to your i2c address, debug provides REPL interface
+
+    var STATUS_PACKET_SIZE = 24
+
+    this.getBatteryVoltage = function(callback) {   // callback = function(err, voltage)
+      wire.read(STATUS_PACKET_SIZE, function(err, buffer) {
+        if (err) {
+          callback(err, 0);
+        } else {
+          volt = ((buffer[2]*256)+buffer[3])/100.0;
+          callback(null, volt);
+        }
+      });
+    }
+
+}
+
+exports.create = create;
