@@ -32,14 +32,14 @@ app.get('/', function (req, res){
 });
 
 // @GET
-// returns { "battery_voltage": "7.88", status: "success" }
+// returns { "battery_voltage": 7.88, status: "success" }
 app.get('/batteryvoltage', function (req, res){
   res.setHeader('Content-Type', 'application/json');
 
   trex.getBatteryVoltage(function(err, voltage) {
     if (err) {
       console.log('Could not read status from trex controller: ' + err);
-      res.send(JSON.stringify({ battery_voltage: "", status: "failed" }));
+      res.send(JSON.stringify({ battery_voltage: null, status: "failed" }));
     } else {
       res.send(JSON.stringify({ battery_voltage: voltage, status: "success" }));
     }
@@ -54,26 +54,30 @@ app.get('/errors', function (req, res){
   trex.getErrors(function(err, error_flags) {
     if (err) {
       console.log('Could not read status from trex controller: ' + err);
-      res.send(JSON.stringify({ "pwm_frequency": "", "motor_speed": "", "low_battery_threshold": "", status: "failed" }));
+      res.send(JSON.stringify({
+        pwm_frequency: null,
+        motor_speed: null,
+        low_battery_threshold: null,
+        status: "failed" }));
     } else {
       res.send(JSON.stringify({
-        "pwm_frequency": error_flags.pwm_frequency,
-        "motor_speed": error_flags.motor_speed,
-        "low_battery_threshold": error_flags.low_battery_threshold,
+        pwm_frequency: error_flags.pwm_frequency,
+        motor_speed: error_flags.motor_speed,
+        low_battery_threshold: error_flags.low_battery_threshold,
         status: "success" }));
     }
   });
 });
 
 // @GET
-// returns { "number_of_string": "2", "string_ids": [0,1], "status":"success" }
+// returns { "number_of_string": 2, "string_ids": [0,1], "status":"success" }
 app.get('/neopixels/strings', function (req, res) {
   res.setHeader('Content-Type', 'application/json');
 
   neopix.getNumberOfString(function(err, nos) {
     if (err) {
       console.log('Could not read from i2c: ' + err);
-      res.send(JSON.stringify({ number_of_string: "", string_ids: [], status: "failed" }));
+      res.send(JSON.stringify({ number_of_string: null, string_ids: null, status: "failed" }));
     } else {
       var ids = new Array(nos);
       for (i = 0; i < nos; i++) { ids[i] = i; }
