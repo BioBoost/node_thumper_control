@@ -72,7 +72,7 @@ app.get('/neopixels/strings/:id', function (req, res) {
 });
 
 // @POST
-// expects { red": 10, "green": 255, "blue": 0 }
+// expects { "red": 10, "green": 255, "blue": 0 }
 // returns { "status": "success" }
 app.post('/neopixels/strings/:id', function (req, res) {
   var id = req.params.id    // id is currently unused (i2c function not implemented yet)
@@ -86,6 +86,26 @@ app.post('/neopixels/strings/:id', function (req, res) {
   neopix.setAll(red, green, blue, function(err){
     if (err) {
       console.log('Could not write color to i2c: ' + err);
+      res.send(JSON.stringify({ status: "failed" }));
+    } else {
+      res.send(JSON.stringify({ status: "success" }));
+    }
+  });
+});
+
+// @POST
+// expects { "left_speed": 10, "right_speed": 255 }
+// returns { "status": "success" }
+app.post('/speed', function (req, res) {
+  var left_speed = req.body.left_speed;
+  var right_speed = req.body.right_speed;
+  console.log('Setting thumper speed ' + ' to L=' + left_speed + ' R=' + right_speed);
+
+  res.setHeader('Content-Type', 'application/json');
+
+  trex.setSpeed(left_speed, right_speed, function(err){
+    if (err) {
+      console.log('Could not set Trex speed: ' + err);
       res.send(JSON.stringify({ status: "failed" }));
     } else {
       res.send(JSON.stringify({ status: "success" }));
