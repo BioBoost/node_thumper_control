@@ -117,6 +117,29 @@ app.post('/neopixels/strings/:id', function (req, res) {
 });
 
 // @POST
+// expects { "red": 10, "green": 255, "blue": 0, "delay": 100 }
+// returns { "status": "success" }
+app.post('/neopixels/effects/strobe/:id', function (req, res) {
+  var id = req.params.id    // id is currently unused (i2c function not implemented yet)
+  var red = req.body.red;
+  var green = req.body.green;
+  var blue = req.body.blue;
+  var delay = req.body.delay;
+  console.log('Strobing for string ' + id + ' to R=' + red + ' G=' + green + ' B=' + blue + 'with delay=' + delay + 'ms');
+
+  res.setHeader('Content-Type', 'application/json');
+
+  neopix.strobeAll(red, green, blue, delay, function(err){
+    if (err) {
+      console.log('Could not write strobe to i2c: ' + err);
+      res.send(JSON.stringify({ status: "failed" }));
+    } else {
+      res.send(JSON.stringify({ status: "success" }));
+    }
+  });
+});
+
+// @POST
 // expects { "left_speed": 10, "right_speed": 255 }
 // returns { "status": "success" }
 app.post('/speed', function (req, res) {
