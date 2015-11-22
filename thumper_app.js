@@ -47,6 +47,25 @@ app.get('/batteryvoltage', function (req, res){
 });
 
 // @GET
+// returns { "pwm_frequency": false, "motor_speed": false, "low_battery_threshold": false, status: "success" }
+app.get('/errors', function (req, res){
+  res.setHeader('Content-Type', 'application/json');
+
+  trex.getErrors(function(err, error_flags) {
+    if (err) {
+      console.log('Could not read status from trex controller: ' + err);
+      res.send(JSON.stringify({ "pwm_frequency": "", "motor_speed": "", "low_battery_threshold": "", status: "failed" }));
+    } else {
+      res.send(JSON.stringify({
+        "pwm_frequency": error_flags.pwm_frequency,
+        "motor_speed": error_flags.motor_speed,
+        "low_battery_threshold": error_flags.low_battery_threshold,
+        status: "success" }));
+    }
+  });
+});
+
+// @GET
 // returns { "number_of_string": "2", "string_ids": [0,1], "status":"success" }
 app.get('/neopixels/strings', function (req, res) {
   res.setHeader('Content-Type', 'application/json');
