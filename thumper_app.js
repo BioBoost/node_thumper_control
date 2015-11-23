@@ -2,8 +2,18 @@
 var express = require('express');
 var app = express();
 var bodyParser = require("body-parser");
-var NeoPixelController = require('./lib/neopixelcontroller');
-var TRexController = require('./lib/trexcontroller')
+
+// If library is detected we use real controllers
+try {
+  require('i2c');
+  var NeoPixelController = require('./lib/neopixelcontroller');
+  var TRexController = require('./lib/trexcontroller');
+  console.log("Running in production mode");
+} catch(err) {   // else we use mocked controllers
+  var NeoPixelController = require('./lib/neopixelcontroller_mock');
+  var TRexController = require('./lib/trexcontroller_mock');
+  console.log("Running in development mode with mocked controllers");
+}
 
 // Set port
 app.set('port', process.env.PORT || 3000);
