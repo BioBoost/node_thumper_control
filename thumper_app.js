@@ -151,6 +151,31 @@ app.post('/neopixels/effects/strobe/:id', function (req, res) {
 });
 
 // @POST
+// expects { "red": 10, "green": 255, "blue": 0, "delay": 100, "groupsize": 8 }
+// returns { "status": "success" }
+app.post('/neopixels/effects/shift/:id', function (req, res) {
+  var id = req.params.id    // id is currently unused (i2c function not implemented yet)
+  var red = req.body.red;
+  var green = req.body.green;
+  var blue = req.body.blue;
+  var delay = req.body.delay;
+  var groupsize = req.body.groupsize;
+  console.log('Shifting for string ' + id + ' to R=' + red + ' G=' + green + ' B=' + blue
+              + 'with delay=' + delay + 'ms and groupsize of ' + groupsize);
+
+  res.setHeader('Content-Type', 'application/json');
+
+  neopix.shiftAll(red, green, blue, delay, groupsize, function(err){
+    if (err) {
+      console.log('Could not write shift to i2c: ' + err);
+      res.send(JSON.stringify({ status: "failed" }));
+    } else {
+      res.send(JSON.stringify({ status: "success" }));
+    }
+  });
+});
+
+// @POST
 // expects { "left_speed": 10, "right_speed": 255 }
 // returns { "status": "success" }
 app.post('/speed', function (req, res) {

@@ -52,6 +52,16 @@ The red, green and blue values should be in the range of [0, 255]. The delay sho
     returns { "status": "success" }
 ```
 
+### Let a single LED shift through a group of LEDs. Size of group can be divident of actual string size. On the mBed side this is called a ShiftEffect.
+
+The red, green and blue values should be in the range of [0, 255]. The delay should be between [10, 255] (milliseconds).
+
+```javascript
+    //  @POST /neopixels/effects/shift/:id
+    expects { "red": 10, "green": 255, "blue": 0, "delay": 100, "groupsize": 8 }
+    returns { "status": "success" }
+```
+
 ### Set the left and right side speed of the Thumper. Values can be negative to drive backwards.
 
 While the refresh time of drive commands can vary on the server side it should never be expected to be less than 500ms. Do make sure not to overflow the server side by taking extreme low refresh times.
