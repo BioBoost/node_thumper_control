@@ -34,6 +34,8 @@ This is not fully implemented yet. You should assume that a single string is att
 
 ### Set the color of all the neopixel LEDs of a specified string. On the mBed side this is called a ColorEffect.
 
+The red, green and blue values should be in the range of [0, 255].
+
 ```javascript
     //  @POST /neopixels/strings/:id
     expects { "red": 10, "green": 255, "blue": 0 }
@@ -41,6 +43,8 @@ This is not fully implemented yet. You should assume that a single string is att
 ```
 
 ### Set the color of all the neopixel LEDs of a specified string and initiate a strobe effect. On the mBed side this is called a StrobeEffect.
+
+The red, green and blue values should be in the range of [0, 255]. The delay should be between [10, 255] (milliseconds).
 
 ```javascript
     //  @POST /neopixels/effects/strobe/:id
