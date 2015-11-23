@@ -2,6 +2,71 @@
 
 Thumper Control RESTful node app provides a RESTful interface to the thumper controlled by a Raspberry Pi.
 
+## Exposed API
+The status key included in some responses indicates the state of the performed action on the Thumper. Success indicates a successful data transfer via i2c and failed indicates that the i2c data transfer was not successful. In case of a failed transaction the response data cannot be considered valid and will most of the time contain null-values.
+
+### Saying hello to the thumper
+```javascript
+    // @GET /
+    returns { "message": "Hello and welcome to the Thumper Control RESTful API" }
+```
+
+### Request the current voltage level of the battery
+```javascript
+    //  @GET /batteryvoltage
+    returns { "battery_voltage": 7.88, status: "success" }
+```
+
+### Request the error flags
+```javascript
+    //  @GET /errors
+    returns { "pwm_frequency": false, "motor_speed": false, "low_battery_threshold": false, status: "success" }
+```
+
+### Request number of attached neopixel strings and their ids
+
+This is not fully implemented yet. You should assume that a single string is attached to the Thumper and it has the ID of 0. It contains 16 pixels (not relevant for the moment).
+
+```javascript
+    //  @GET /neopixels/strings
+    returns { "number_of_string": 2, "string_ids": [0,1], "status":"success" }
+```
+
+### Set the color of all the neopixel LEDs of a specified string. On the mBed side this is called a ColorEffect.
+
+```javascript
+    //  @POST /neopixels/strings/:id
+    expects { "red": 10, "green": 255, "blue": 0 }
+    returns { "status": "success" }
+```
+
+### Set the color of all the neopixel LEDs of a specified string and initiate a strobe effect. On the mBed side this is called a StrobeEffect.
+
+```javascript
+    //  @POST /neopixels/effects/strobe/:id
+    expects { "red": 10, "green": 255, "blue": 0, "delay": 100 }
+    returns { "status": "success" }
+```
+
+### Set the left and right side speed of the Thumper. Values can be negative to drive backwards.
+
+While the refresh time of drive commands can vary on the server side it should never be expected to be less than 500ms. Do make sure not to overflow the server side by taking extreme low refresh times.
+
+```javascript
+    //  @POST /speed
+    expects { "left_speed": 10, "right_speed": 255 }
+    returns { "status": "success" }
+```
+
+### Request the number of pixels for a specified string (identified using its string id)
+
+This is not fully implemented yet. You should assume that a single string is attached to the Thumper and it has the ID of 0. It contains 16 pixels (not relevant for the moment).
+
+```javascript
+    //  @GET /neopixels/strings/:id
+    returns { "string_id": "1", "number_of_pixels": 8 }
+```
+
 ## Hardware Requirements
 
 - Raspberry PI connected to TRex motor controller via i2c
@@ -18,7 +83,7 @@ Thumper Control RESTful node app provides a RESTful interface to the thumper con
 - i2c
 
 ### Version
-0.1 (alpha version)
+0.2 (alpha version)
 
 ### Installation
 
@@ -44,4 +109,3 @@ node thumper_app.js
 Apache-2.0
 
 **Free Software, Hell Yeah!**
-
