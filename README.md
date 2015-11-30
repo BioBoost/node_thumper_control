@@ -2,6 +2,9 @@
 
 Thumper Control RESTful node app provides a RESTful interface to the thumper controlled by a Raspberry Pi.
 
+## Important
+This application is meant to be used with the new trex firmware which can be found at https://github.com/BioBoost/thumper_trex_firmware
+
 ## Exposed API
 The status key included in some responses indicates the state of the performed action on the Thumper. Success indicates a successful data transfer via i2c and failed indicates that the i2c data transfer was not successful. In case of a failed transaction the response data cannot be considered valid and will most of the time contain null-values.
 
