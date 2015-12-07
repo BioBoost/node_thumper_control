@@ -57,7 +57,7 @@ app.get('/batteryvoltage', function (req, res){
 });
 
 // @GET
-// returns { "pwm_frequency": false, "motor_speed": false, "low_battery_threshold": false, status: "success" }
+// returns { "motor_speed": false, "low_battery_threshold": false, status: "success" }
 app.get('/errors', function (req, res){
   res.setHeader('Content-Type', 'application/json');
 
@@ -65,13 +65,11 @@ app.get('/errors', function (req, res){
     if (err) {
       console.log('Could not read status from trex controller: ' + err);
       res.send(JSON.stringify({
-        pwm_frequency: null,
         motor_speed: null,
         low_battery_threshold: null,
         status: "failed" }));
     } else {
       res.send(JSON.stringify({
-        pwm_frequency: error_flags.pwm_frequency,
         motor_speed: error_flags.motor_speed,
         low_battery_threshold: error_flags.low_battery_threshold,
         status: "success" }));

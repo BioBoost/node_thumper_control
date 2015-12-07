@@ -23,7 +23,7 @@ The status key included in some responses indicates the state of the performed a
 ### Request the error flags
 ```javascript
     //  @GET /errors
-    returns { "pwm_frequency": false, "motor_speed": false, "low_battery_threshold": false, status: "success" }
+    returns { "motor_speed": false, "low_battery_threshold": false, status: "success" }
 ```
 
 ### Request number of attached neopixel strings and their ids
