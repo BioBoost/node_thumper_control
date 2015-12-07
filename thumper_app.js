@@ -175,7 +175,7 @@ app.post('/neopixels/effects/shift/:id', function (req, res) {
 
 // @POST
 // expects { "left_speed": 10, "right_speed": 255 }
-// returns { "status": "success" }
+// returns { "battery_voltage": 7.88, "status": "success" }
 app.post('/speed', function (req, res) {
   var left_speed = req.body.left_speed;
   var right_speed = req.body.right_speed;
@@ -183,12 +183,12 @@ app.post('/speed', function (req, res) {
 
   res.setHeader('Content-Type', 'application/json');
 
-  trex.setSpeed(left_speed, right_speed, function(err){
+  trex.setSpeed(left_speed, right_speed, function(err, voltage){
     if (err) {
       console.log('Could not set Trex speed: ' + err);
-      res.send(JSON.stringify({ status: "failed" }));
+      res.send(JSON.stringify({ battery_voltage: null, status: "failed" }));
     } else {
-      res.send(JSON.stringify({ status: "success" }));
+      res.send(JSON.stringify({ battery_voltage: voltage, status: "success" }));
     }
   });
 });

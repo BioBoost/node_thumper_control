@@ -72,7 +72,7 @@ While the refresh time of drive commands can vary on the server side it should n
 ```javascript
     //  @POST /speed
     expects { "left_speed": 10, "right_speed": 255 }
-    returns { "status": "success" }
+    returns { "battery_voltage": 7.88, "status": "success" }
 ```
 
 ### Request the number of pixels for a specified string (identified using its string id)
