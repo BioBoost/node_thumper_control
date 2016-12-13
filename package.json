@@ -1,11 +1,12 @@
 {
   "name": "node_thumper_control",
-  "version": "0.1.0-alpha",
+  "version": "0.3.0-alpha",
   "description": "Thumper Control RESTful node app provides a RESTful interface to the thumper controlled by a Raspberry Pi.",
   "main": "thumper_app.js",
   "dependencies": {
     "body-parser": "~1.14.1",
-    "express": "~4.13.3"
+    "express": "~4.13.3",
+    "rpi-gpio": "^0.7.0"
   },
   "devDependencies": {},
   "scripts": {

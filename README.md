@@ -84,11 +84,22 @@ This is not fully implemented yet. You should assume that a single string is att
     returns { "string_id": "1", "number_of_pixels": 8 }
 ```
 
+### Set, reset or toggle the alarm of the Thumper
+
+The state of the alarm can be manipulated by using the action attribute. It can be set to `on`, `off` or `toggle`.
+
+```javascript
+    //  @POST /alarm
+    expects { "action": "on|off|toggle" }
+    returns { "status": "success" }
+```
+
 ## Hardware Requirements
 
 - Raspberry PI connected to TRex motor controller via i2c
 - mBed connected to Raspberry Pi via i2c flashed with NeoPixel controller firmware
 - NeoPixel strings attached to mBed
+- Piezo attached to GPIO22 (pin 15, 8th pin on the left side)
 
 ## Software requirements
 - NeoPixelI2cSlave firmware deployed on the mBed (https://developer.mbed.org/users/dwini/code/NeoPixelI2cSlave/)
@@ -98,9 +109,10 @@ This is not fully implemented yet. You should assume that a single string is att
 - express
 - body-parser
 - i2c
+- rpi-gpio
 
 ### Version
-0.2 (alpha version)
+0.3 (alpha version)
 
 ### Installation
 
@@ -120,6 +132,12 @@ Just issue the following command in a terminal
 
 ```sh
 node thumper_app.js
+```
+
+Or as root if you want the alarm to work (need workaround for root for GPIO)
+
+```sh
+sudo node thumper_app.js
 ```
 
 ### License

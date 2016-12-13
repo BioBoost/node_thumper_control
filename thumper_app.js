@@ -8,10 +8,12 @@ try {
   require('i2c');
   var NeoPixelController = require('./lib/neopixelcontroller');
   var TRexController = require('./lib/trexcontroller');
+  var Alarm = require('./lib/alarm');
   console.log("Running in production mode");
 } catch(err) {   // else we use mocked controllers
   var NeoPixelController = require('./lib/neopixelcontroller_mock');
   var TRexController = require('./lib/trexcontroller_mock');
+  var Alarm = require('./lib/alarm_mock');
   console.log("Running in development mode with mocked controllers");
 }
 
@@ -24,6 +26,7 @@ app.use(bodyParser.urlencoded({ extended: true }));   // for parsing application
 
 var neopix = new NeoPixelController.create(0x40, '/dev/i2c-1');
 var trex = new TRexController.create(0x07, '/dev/i2c-1');
+var alarm = new Alarm.create(15);
 
 // Log all requests
 app.use(function(req, res, next){
@@ -191,6 +194,35 @@ app.post('/speed', function (req, res) {
       res.send(JSON.stringify({ battery_voltage: voltage, status: "success" }));
     }
   });
+});
+
+// @POST
+// expects { "action": "on|off|toggle" }
+// returns { "status": "success" }
+app.post('/alarm', function (req, res) {
+  var action = req.body.action
+  console.log('Alarm action = ' + action);
+
+  res.setHeader('Content-Type', 'application/json');
+
+  var statusReport = function(err) {
+    if (err) {
+      res.send(JSON.stringify({ status: "failed" }));
+    } else {
+      res.send(JSON.stringify({ status: "success" }));
+    }
+  };
+
+  if (action == 'on') {
+    alarm.on(statusReport);
+  } else if (action == 'off') {
+    alarm.off(statusReport);
+  } else if (action == 'toggle') {
+    alarm.toggle(statusReport);
+  } else {
+    console.log("Invalid alarm action");
+    statusReport("invalid action");
+  }
 });
 
 // Custom 404 (needs to be last in line of routes)
