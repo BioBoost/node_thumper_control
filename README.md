@@ -3,7 +3,7 @@
 Thumper Control RESTful node app provides a RESTful interface to the thumper controlled by a Raspberry Pi.
 
 ## Important
-This application is meant to be used with the new trex firmware which can be found at https://github.com/BioBoost/thumper_trex_firmware
+This application is meant to be used with the new TRex firmware which can be found at https://github.com/BioBoost/thumper_trex_firmware
 
 ## Exposed API
 The status key included in some responses indicates the state of the performed action on the Thumper. Success indicates a successful data transfer via i2c and failed indicates that the i2c data transfer was not successful. In case of a failed transaction the response data cannot be considered valid and will most of the time contain null-values.
@@ -125,6 +125,12 @@ If working on Raspberry Pi you also need to install the i2c package
 ```sh
 $ npm install git+https://github.com/kelly/node-i2c.git
 ```
+
+#### Requirements on Windows with mocked Hardware
+
+* Make sure you have python installed (version 2.7 or similar). Also make sure it is added to path (installer checkbox in list)
+* Install node.js on your computer
+* Install windows building tools via powershell (run as administrator): `npm install --global --production windows-build-tools`
 
 ### Running App
 
