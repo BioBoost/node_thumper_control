@@ -146,6 +146,16 @@ Or as root if you want the alarm to work (need workaround for root for GPIO)
 sudo node thumper_app.js
 ```
 
+## Run as a Service
+
+```shell
+chmod +x thumper_app.py
+sudo su
+cp thumper_control.service /etc/systemd/system
+systemctl enable thumper_control.service
+systemctl start thumper_control.service
+```
+
 ### License
 Apache-2.0
 
