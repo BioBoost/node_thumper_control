@@ -1,0 +1,11 @@
+[Unit]
+Description=Thumper Control
+Wants=network-online.target
+After=network.target network-online.target
+
+[Service]
+ExecStart=/home/pi/node_thumper_control/thumper_app.js
+Restart=always
+
+[Install]
+WantedBy=default.target

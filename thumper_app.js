@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 // Use express module for RESTful API
 var express = require('express');
 var app = express();
