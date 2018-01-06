@@ -6,7 +6,8 @@ var bodyParser = require("body-parser");
 // If library is detected we use real controllers
 try {
   require('i2c');
-  var NeoPixelController = require('./lib/neopixelcontroller');
+  // var NeoPixelController = require('./lib/neopixelcontroller');
+  var NeoPixelController = require('./lib/neopixelmqttcontroller');
   var TRexController = require('./lib/trexcontroller');
   var Alarm = require('./lib/alarm');
   console.log("Running in production mode");
@@ -24,7 +25,8 @@ app.set('port', process.env.PORT || 3000);
 app.use(bodyParser.json());   // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true }));   // for parsing application/x-www-form-urlencoded
 
-var neopix = new NeoPixelController.create(0x40, '/dev/i2c-1');
+// var neopix = new NeoPixelController.create(0x40, '/dev/i2c-1');
+var neopix = new NeoPixelController.create("localhost");
 var trex = new TRexController.create(0x07, '/dev/i2c-1');
 var alarm = new Alarm.create(15);
 

@@ -6,7 +6,8 @@
   "dependencies": {
     "body-parser": "~1.14.1",
     "express": "~4.13.3",
-    "rpi-gpio": "^0.7.0"
+    "rpi-gpio": "^0.7.0",
+    "mqtt": "~2.15.0"
   },
   "devDependencies": {},
   "scripts": {
