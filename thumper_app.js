@@ -27,7 +27,7 @@ app.use(bodyParser.urlencoded({ extended: true }));   // for parsing application
 
 // var neopix = new NeoPixelController.create(0x40, '/dev/i2c-1');
 var neopix = new NeoPixelController.create("localhost");
-var trex = new TRexController.create(0x07, '/dev/i2c-1');
+var trex = new TRexController.create(0x07, '/dev/i2c-1', false, true);
 var alarm = new Alarm.create(15);
 
 // Log all requests
