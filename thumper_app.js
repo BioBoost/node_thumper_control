@@ -11,7 +11,8 @@ try {
   // var NeoPixelController = require('./lib/neopixelcontroller');
   var NeoPixelController = require('./lib/neopixelmqttcontroller');
   var TRexController = require('./lib/trexcontroller');
-  var Alarm = require('./lib/alarm');
+  // var Alarm = require('./lib/alarm');
+  var Alarm = require('./lib/alarm_pwm');
   console.log("Running in production mode");
 } catch(err) {   // else we use mocked controllers
   var NeoPixelController = require('./lib/neopixelcontroller_mock');
@@ -30,7 +31,16 @@ app.use(bodyParser.urlencoded({ extended: true }));   // for parsing application
 // var neopix = new NeoPixelController.create(0x40, '/dev/i2c-1');
 var neopix = new NeoPixelController.create("localhost");
 var trex = new TRexController.create(0x07, '/dev/i2c-1', false, true);
-var alarm = new Alarm.create(15);
+var alarm = new Alarm.create(33);   // GPIO33 = PWM0 (thumperv2); GPIO15 = BCM22 (thumperv1)
+
+// Need some waiting as GPIO is not ready yet
+setTimeout(function(){
+  alarm.on(function(err){});
+  setTimeout(function(){
+    alarm.off(function(err){});
+  }, 500);
+}, 2000);
+
 
 // Log all requests
 app.use(function(req, res, next){
