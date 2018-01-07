@@ -117,14 +117,18 @@ The state of the alarm can be manipulated by using the action attribute. It can 
 ### Installation
 
 ```sh
-$ npm install
+sudo su
+npm install --unsafe-perm
 ```
 
 If working on Raspberry Pi you also need to install the i2c package
 
 ```sh
-$ npm install git+https://github.com/kelly/node-i2c.git
+sudo su
+npm install --unsafe-perm i2c
 ```
+
+`--unsafe-perm` is required to be able to install npm packages as root.
 
 #### Requirements on Windows with mocked Hardware
 
